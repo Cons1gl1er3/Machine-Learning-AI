@@ -161,3 +161,31 @@ JOIN branch
 ON employee.emp_id = branch.mgr_id; 
 
 -- Nested Queries
+SELECT employee.first_name, employee.last_name
+FROM employee
+WHERE employee.emp_id IN (
+    SELECT works_with.emp_id
+    FROM works_with
+    WHERE total_sales > 30000
+);
+
+SELECT client.client_name
+FROM client
+WHERE client.branch_id = (
+    SELECT branch.branch_id
+    FROM branch
+    WHERE mgr_id = (
+        SELECT employee.emp_id
+        FROM employee
+        WHERE employee.first_name = "Michael" AND employee.last_name = "Scott")
+);
+
+-- Trigger
+CREATE TABLE trigger_test (
+    message VARCHAR(100)
+);
+
+CREATE VIEW female_employee AS
+SELECT e.emp_id, e.first_name, e.salary
+FROM employee e
+WHERE e.sex = 'F';
